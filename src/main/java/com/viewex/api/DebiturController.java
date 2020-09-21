@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -31,9 +32,15 @@ public class DebiturController {
         return ResponseEntity.ok(aDebiture);
     }
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<Debitur> SelectDebitur(@PathVariable int id){
+    @GetMapping("/user")
+    public ModelAndView SelectDebitur(@RequestParam("id") int id){
+
+        ModelAndView MAV = new ModelAndView();
+
         Debitur aDebiture = debiturApp.getDebitur(id);
-        return ResponseEntity.ok(aDebiture);
+
+        MAV.addObject("debitur", aDebiture);
+        MAV.setViewName("index");
+        return MAV;
     }
 }
