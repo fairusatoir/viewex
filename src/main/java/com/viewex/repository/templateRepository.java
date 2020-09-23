@@ -1,11 +1,8 @@
 package com.viewex.repository;
 
-import com.viewex.model.Debitur;
 import com.viewex.model.template;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-
-import java.util.List;
 
 public interface templateRepository extends CrudRepository<template,Integer> {
 
