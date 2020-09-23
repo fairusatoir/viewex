@@ -40,6 +40,7 @@ public class DebiturController {
         Debitur aDebiture = debiturApp.getDebitur(id);
 
         MAV.addObject("debitur", aDebiture);
+
         MAV.setViewName("index");
         return MAV;
     }
