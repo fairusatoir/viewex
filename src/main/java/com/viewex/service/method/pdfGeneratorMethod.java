@@ -1,16 +1,10 @@
-package com.viewex.service;
+package com.viewex.service.method;
 
 import com.viewex.model.template;
 import com.viewex.repository.templateRepository;
+import com.viewex.service.pdfGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
-
-import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @Service
 public class pdfGeneratorMethod implements pdfGenerator {
@@ -22,4 +16,6 @@ public class pdfGeneratorMethod implements pdfGenerator {
     public template getTemplate(int id) {
         return templateDB.findTempalte(id);
     }
+
+
 }

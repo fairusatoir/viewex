@@ -19,4 +19,5 @@ public class ViewexApplication {
 //	4. https://www.thymeleaf.org/doc/articles/springmvcaccessdata.html
 //	5. https://www.baeldung.com/thymeleaf-arrays
 //	6. https://www.baeldung.com/thymeleaf-generate-pdf
+//	7. https://stackoverflow.com/a/54806606
 }
