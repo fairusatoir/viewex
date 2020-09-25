@@ -39,6 +39,15 @@
             line-height: 14pt;
         }
 
+        tr.page-footer {
+            height: 51px;
+            text-align:right;
+        }
+
+        .page-number{
+            padding-right: 1in;
+        }
+
         ol {
             margin:0;
         }
@@ -81,7 +90,7 @@
             <th style="padding-right: 3cm;">LAMPIRAN III</th>
         </tr>
         <tr>
-            <td valign="top" style="padding-left: 1in;">
+            <td valign="top" style="padding:0in 0.25in 0in 1in;">
                 <div class="title" ><b>PERJANJIAN KREDIT BNI FLEKSI</b>
                 </div>
                 <br/>
@@ -111,7 +120,7 @@
                     <li>Tanggal mulai berlakunya jangka waktu kredit sesuai dengan tanggal persetujuan atas keputusan kredit oleh PENERIMA KREDIT No .... terhitung sejak tanggal <span th:text="${kredit_start}"></span> sampai dengan tanggal <span th:text="${kredit_end}"></span>.</li>
                 </ol>
             </td>
-            <td valign="top" style="padding-right: 1in;">
+            <td valign="top" style="padding:0in 1in 0in 0in;">
                 <ol start="4">
                     <li>Suku bunga sebesar <span th:text="${interest_percen}"></span> % efektif (fixed) per tahun.</li>
                     <li>Terkait pencairan kredit :</li>
@@ -124,16 +133,17 @@
                     <ol class="level-two" >
                         <li>PENERIMA KREDIT diwajibkan melakukan pembayaran dalam bentuk angsuran kredit yang terdiri dari angsuran pokok ditambah bunga setiap bulannya sebesar Rp <span th:text="${interest_rp}"></span> (<span th:text="${interest_max_text}"></span> rupiah).</li>
                         <li>Pembayaran angsuran kredit dilaksanakan dengan cara membebani/mendebet rekening afiliasi Taplus/TAPPA atas nama PENERIMA KREDIT yang dibuka pada BNI sebagaimana yang dimaksud pada butir 5 huruf b Perjanjian ini.</li>
-                        <li>Guna kelancaran pembayaran angsuran kredit setiap bulannya, sejak tanggal penandatanganan Perjanjian Kredit ini sampai dengan kredit lunas, PENERIMA KREDIT wajib untuk memelihara saldo rekening afiliasi sebagaimana dimaksud pada butir 6 huruf b perjanjian ini sebesar satu kali angsuran kredit pertama ditambah saldo minimum rekening afiliasi, dan selanjutnya diblokir oleh BNI, karenanya PENERIMA KREDIT memberi kuasa kepada BNI untuk memblokir rekening dimaksud.</li>
+                        <li>Guna kelancaran pembayaran angsuran kredit setiap bulannya, sejak tanggal penandatanganan Perjanjian Kredit ini sampai dengan kredit lunas, PENERIMA KREDIT wajib untuk memelihara saldo rekening afiliasi sebagaimana dimaksud pada butir 6 huruf b perjanjian ini sebesar satu kali angsuran kredit pertama ditambah saldo minimum rekening afiliasi, dan selanjutnya diblokir oleh BNI, karenanya PENERIMA KREDIT memberi kuasa</li>
                     </ol>
                 </ol>
             </td>
         </tr>
-        <tr style="height: auto;">
+        <tr class="page-footer">
             <td></td>
-            <td style="padding-right: 3cm;text-align:right;">1</td>
+            <td class="page-number">1</td>
         </tr>
     </table>
+
 
     <table>
         <tr style="height: 96px;">
@@ -141,12 +151,17 @@
             <th style="padding-right: 3cm;">LAMPIRAN III</th>
         </tr>
         <tr>
-            <td valign="top" style="padding-left: 1in;">
+            <td valign="top" style="padding:0in 0.25in 0in 0.7in;">
+                <span style="padding-left: 0.75in;">
+                     kepada BNI untuk memblokir rekening dimaksud.
+                </span>
+                <br/>
+                <br/>
                 <ol start="7">
                     <li>Terkait dengan denda tunggakan :</li>
                     <ol class="level-two" >
                         <li>Denda tunggakan adalah kewajiban yang harus dibayar oleh PENERIMA KREDIT kepada BNI karena tidak terpenuhinya pembayaran angsuran kredit, atau tidak dilunasinya kredit sebagai akibat diakhirinya jangka waktu kredit secara sepihak oleh BNI.</li>
-                        <li>Denda tunggakan adalah 2.5 % ( dua koma lima persen ) per bulan dihitung dari besarnya angsuran yang tertunggak.</li>
+                        <li>Denda tunggakan adalah <b>2.5 % ( dua koma lima persen )</b>  per bulan dihitung dari besarnya angsuran yang tertunggak.</li>
                         <li>Selama PENERIMA KREDIT mempunyai tunggakan, maka setiap setoran PENERIMA KREDIT kepada BNI akan diperhitungkan terlebih dahulu oleh BNI sebagai pembayaran tunggakan dimaksud. </li>
                     </ol>
                     <li>Terkait dengan jaminan :</li>
@@ -159,7 +174,7 @@
                 </ol>
             </td>
             <td valign="top" style="padding-right: 1in;">
-                <ol start="7">
+                <ol start="11">
                     <ol class="level-two" >
                         <li>PENERIMA KREDIT tidak memenuhi ketentuan-ketentuan dalam Perjanjian Kredit ini sebagaimana mestinya.</li>
                         <li>PENERIMA KREDIT melakukan perbuatan dan atau terjadinya peristiwa dalam bentuk dan dengan nama apapun yang dapat mengancam kelangsungan pembayaran kewajiban PENERIMA KREDIT kepada BNI.</li>
@@ -168,15 +183,15 @@
                     <ol class="level-two" >
                         <li>PENERIMA KREDIT wajib menutup asuransi jiwa  terhadap dirinya pada Perusahaan Asuransi Jiwa yang merupakan rekanan BNI, dengan nilai pertanggungan sebesar nilai maksimum kredit sesuai Perjanjian Kredit ini dan jangka waktu penutupan asuransi sama dengan jangka waktu Perjanjian Kredit ini. </li>
                         <li>Premi asuransi jiwa sebagaimana dimaksud pada ayat (1) Pasal ini harus sudah dibayar lunas atau dicadangkan oleh PENERIMA KREDIT dibawah penguasaan BNI sebelum dilakukan pencairan kredit.</li>
-                        <li>Dalam Polis Asuransi sebagaimana dimaksud pada ayat (1) dan (2) Pasal ini, harus dicantumkan Banker’s Clause BNI, sehingga jika ada pembayaran klaim dari Pihak Perusahaan Asuransi, maka BNI berhak untuk memperhitungkan hasil pembayaran klaim tersebut dengan seluruh kewajiban PENERIMA KREDIT kepada BNI.</li>
+                        <li>Dalam Polis Asuransi sebagaimana dimaksud pada ayat (1) dan (2) Pasal ini, harus dicantumkan Banker's Clause BNI, sehingga jika ada pembayaran klaim dari Pihak Perusahaan Asuransi, maka BNI berhak untuk memperhitungkan hasil pembayaran klaim tersebut dengan seluruh kewajiban PENERIMA KREDIT kepada BNI.</li>
                         <li>Sewaktu-waktu tanpa persetujuan dari PENERIMA KREDIT dan pemberitahuan terlebih dahulu kepada PENERIMA KREDIT, BNI berhak untuk melakukan penutupan asuransi jiwa PENERIMA KREDIT apabila PENERIMA KREDIT tidak melaksanakan penutupan asuransi (dan premi tetap menjadi beban PENERIMA KREDIT) . BNI dengan ini diberi hak untuk menerima hasil pembayaran klaim dari Perusahaan Asuransi serta memperhitungkan hasil pembayaran klaim tersebut dengan seluruh kewajiban/ outstanding PENERIMA KREDIT kepada BNI apabila BNI menganggap dan mengetahui telah terjadi salah satu risiko (wan prestasi).</li>
                     </ol>
                 </ol>
             </td>
         </tr>
-        <tr style="height: auto;">
+        <tr class="page-footer">
             <td></td>
-            <td style="padding-right: 3cm;text-align:right;">2</td>
+            <td class="page-number">2</td>
         </tr>
     </table>
 
@@ -186,7 +201,7 @@
             <th style="padding-right: 3cm;">LAMPIRAN III</th>
         </tr>
         <tr>
-            <td valign="top" style="padding-left: 1in;">
+            <td valign="top" style="padding:0in 0.25in 0in 0.7in;">
                 <ol start="12">
                     <li>PENERIMA KREDIT wajib segera memberitahukan kepada BNI dalam hal :</li>
                     <ol class="level-two" >
@@ -194,12 +209,12 @@
                         <li>Adanya perkara yang terjadi antara PENERIMA KREDIT dengan pihak lain.</li>
                     </ol>
                     <li>
-                        Terkait dengan Pelunasan Sebelum Jatuh Tempo :<br/>Dalam hal PENERIMA KREDIT akan melunasi BNI Fleksi sebelum jatuh temponya, maka dikenakan biaya sebesar  2 % ( dua persen ) dari sisa outstanding, tunggakan, denda, biaya-biaya lainnya jika ada pada saat pelunasan.
+                        Terkait dengan Pelunasan Sebelum Jatuh Tempo :<br/>Dalam hal PENERIMA KREDIT akan melunasi BNI Fleksi sebelum jatuh temponya, maka dikenakan biaya sebesar <b>  2 % ( dua persen ) </b> dari sisa outstanding, tunggakan, denda, biaya-biaya lainnya jika ada pada saat pelunasan.
 
                     </li>
 
                     <li>
-                        Terkait dengan biaya penutupan rekening :<br/>Dalam hal BNI Fleksi telah dinyatakan lunas oleh BNI dan PENERIMA KREDIT akan menutup rekening, maka dikenakan biaya penutupan rekening sebesar  Rp.  15.000,- ( lima belas ribu rupiah ).
+                        Terkait dengan biaya penutupan rekening :<br/>Dalam hal BNI Fleksi telah dinyatakan lunas oleh BNI dan PENERIMA KREDIT akan menutup rekening, maka dikenakan biaya penutupan rekening sebesar <b> Rp.  15.000,- ( lima belas ribu rupiah )</b>.
                     </li>
 
                     <li>
@@ -218,7 +233,7 @@
                     <li>Apabila karena suatu perubahan peraturan perundang-undangan atau kebijakan pemerintah atau keputusan badan peradilan atau arbitase atau karena alasan apapun, salah satu atau lebih dari ketentuan dalam Perjanjian Kredit ini menjadi atau dinyatakan tidak sah, tidak berlaku, tidak mengikat atau tidak dapat dilaksanakan, maka ketentuan-ketentuan lain dalam Perjanjian Kredit ini dinyatakan tetap berlaku dan mengikat Para Pihak dan dapat dilaksanakannya ketentuan-ketentuan lainnya yang terdapat dalam Perjanjian Kredit ini tidak akan dipengaruhi atau dihalangi dengan cara apapun.</li>
                     <li>Para Pihak setuju untuk menggantikan ketentuan yang dinyatakan tidak sah, tidak berlaku, tidak mengikat atau tidak dapat dilaksanakan tersebut dengan ketentuan yang sah, mengikat dan dapat dilaksanakan. Untuk itu PENERIMA KREDIT akan melaksanakan dan menyerahkan dokumen-dokumen tambahan bila diminta oleh BNI untuk memberlakukan setiap ketentuan Perjanjian Kredit ini yang dinyatakan tidak sah, tidak berlaku, tidak mengikat atau tidak dapat dilaksanakan.</li>
                     <li>Perjanjian ini telah disesuaikan dengan ketentuan peraturan perundang-undangan termasuk ketentuan Peraturan Otoritas Jasa Keuangan.</li>
-                    <li>Perjanjian Kredit ini berlaku dan mengikat pada saat Perjanjian ini ditPara Pihak setuju bahwa seluruh informasi elektronik dan/atau dokumen elektronik dan/atau hasil cetaknya merupakan alat bukti hukum yang sah.andatangani Para Pihak secara elektronik melalui  e-channel BNI , yaitu tanggal <span th:text="${date_sign}"></span> </li>
+                    <li>Perjanjian Kredit ini berlaku dan mengikat pada saat Perjanjian ini ditandatangani Para Pihak secara elektronik melalui  e-channel BNI , yaitu tanggal <span th:text="${date_sign}"></span> </li>
                     <li>
                         Para Pihak setuju bahwa seluruh informasi elektronik dan/atau dokumen elektronik dan/atau hasil cetaknya merupakan alat bukti hukum yang sah. <br/>
                         <b>
@@ -228,9 +243,9 @@
                 </ol>
             </td>
         </tr>
-        <tr style="height: auto;">
+        <tr class="page-footer">
             <td></td>
-            <td style="padding-right: 3cm;text-align:right;">3</td>
+            <td class="page-number">3</td>
         </tr>
     </table>
 
@@ -248,10 +263,11 @@
                 <span th:text="${name}"></span>
                 <div class="note-bene">*) Perjanjian Kredit BNI Fleksi ini ditandatangani secara elektronik</div>
             </td>
-        </tr>
-        <tr style="height: auto;">
             <td></td>
-            <td style="padding-right: 3cm;text-align:right;">4</td>
+        </tr>
+        <tr class="page-footer">
+            <td></td>
+            <td class="page-number">4</td>
         </tr>
     </table>
 </body>

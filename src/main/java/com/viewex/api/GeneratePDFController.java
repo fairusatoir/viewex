@@ -5,7 +5,6 @@ import com.viewex.repository.LogRepository;
 import com.viewex.repository.TemplateRepository;
 import org.springframework.core.io.ByteArrayResource;
 import com.lowagie.text.DocumentException;
-import com.viewex.Exception.Error;
 import com.viewex.model.template;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -60,20 +59,28 @@ public class GeneratePDFController {
         String fileName = name+"."+fileType;
 
         try {
-
             if (templateDataDB == null) { //Check Template Document is exist
-                SaveFailedToPDF(name,userId,content);
-                throw new Error("Template not Found");
-
+                String erroDesc = "Template Document is exist!";
+                SaveFailedToPDF(name,userId,content,erroDesc);
+                return ErrorRespone(erroDesc);
             } else {
 
                 if (contents.length != templateDataDB.getContent_sum()) { //check the amount of content
-                    SaveFailedToPDF(name,userId,content);
-                    throw new Error("The mount of Content does not match, check Content");
+
+                    String erroDesc = "The amount of content is not the same as the template";
+                    SaveFailedToPDF(name,userId,content,erroDesc);
+                    return ErrorRespone(erroDesc);
+
+                }else if(!isNotNullContent(contents)){
+//
+                    String erroDesc = "Some content is unfilled";
+                    SaveFailedToPDF(name,userId,content,erroDesc);
+                    return ErrorRespone(erroDesc);
+
                 } else {
 
                     GeneratePDFController thymeleaf2Pdf = new GeneratePDFController();
-                    String htmlConfig = thymeleaf2Pdf.ParseThymeleafTemplate(templateDataDB, contents);
+                    String htmlConfig = thymeleaf2Pdf.ParseThymeleafTemplate(templateDataDB, contents,name,userId,content);
                     thymeleaf2Pdf.GeneratePdfFromHtml(fileName,htmlConfig);
 
                     ResponseEntity<Resource> httpPDF = DownloadFile(fileName, name, userId,content);
@@ -91,17 +98,19 @@ public class GeneratePDFController {
                 }
             }
         }catch (IOException e){
-            SaveFailedToPDF(name,userId,content);
-            throw new Error("Error! try again", e);
+            String erroDesc = "Service Error, Try again!";
+            SaveFailedToPDF(name,userId,content,erroDesc);
+            return ErrorRespone(erroDesc);
+
         }
     }
 
-    public ResponseEntity<Resource> DownloadFile(
+    private ResponseEntity<Resource> DownloadFile(
             String fileName,
             String name,
             String  userId,
-            String  content)
-            throws IOException {
+            String  content
+    )throws IOException {
 
         File file = new File("src/main/resources/pdf/" + fileName);
 
@@ -122,14 +131,20 @@ public class GeneratePDFController {
                     .body(resource);
 
         }catch (IOException e){
-            SaveFailedToPDF(name,userId,content);
-            throw new Error("Failed to download file "+fileName+" | "+ e.toString());
+            String erroDesc = "Failed Downlaod";
+            SaveFailedToPDF(name,userId,content,erroDesc);
+            return ErrorRespone(erroDesc);
+
         }
     }
 
     private String ParseThymeleafTemplate(
             template templateDataDB,
-            String[] contents){
+            String[] contents,
+            String name,
+            String userId,
+            String content
+    ){
 
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         templateResolver.setPrefix("templates/");
@@ -146,6 +161,45 @@ public class GeneratePDFController {
         return templateEngine.process(templateDataDB.getTemplate_file(), context);
     }
 
+    private Context ReplaceContent(
+            String[] contents,
+            String[] contentDB
+    ){
+        Context context = new Context();
+
+        for (int i = 0; i < contents.length; i++) {
+            if (!contents[i].contains("_")){ //Check content with "_"
+
+                context.setVariable(contentDB[i], contents[i]);
+
+            }else {
+                if ( IsEmailValid(contents[i]) ){ //  Check is email ?
+                    context.setVariable(contentDB[i], contents[i]);
+                }else {
+
+                    String[] nameArray = contents[i].split("_");
+                    String nameUser = "";
+                    for (String separateName : nameArray){
+                        nameUser= nameUser+ separateName +" ";
+                    }
+                    context.setVariable(contentDB[i], nameUser);
+                }
+            }
+
+        }
+        LocalDateTime myDateObj = LocalDateTime.now();
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm");
+        String formattedDate = myDateObj.format(myFormatObj);
+        context.setVariable("dateNow",formattedDate);
+
+        return context;
+    }
+
+    private boolean IsEmailValid(String email) {
+        String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+        return email.matches(regex);
+    }
+
     private void GeneratePdfFromHtml(String fileName,String htmltopdfCOndif) throws IOException, DocumentException{
         String outputFolder = "src/main/resources/pdf/" + fileName;
         OutputStream outputStream = new FileOutputStream(outputFolder);
@@ -158,54 +212,7 @@ public class GeneratePDFController {
         outputStream.close();
     }
 
-    private Context ReplaceContent(String[] contents, String[] contentDB){
-        Context context = new Context();
-        Boolean notError = true;
-
-        for (int i = 0; i < contents.length; i++) {
-
-            if (contents[i].equals("")) { //check the content is not null
-                notError = false;
-                throw new Error("There is a null content section");
-            } else {
-
-                if (!contents[i].contains("_")){ //Check content with "_"
-
-                    context.setVariable(contentDB[i], contents[i]);
-
-                }else {
-                    if ( IsEmailValid(contents[i]) ){ //  Check is email ?
-                        context.setVariable(contentDB[i], contents[i]);
-                    }else {
-
-                        String[] nameArray = contents[i].split("_");
-                        String nameUser = "";
-                        for (String separateName : nameArray){
-                            nameUser= nameUser+ separateName +" ";
-                        }
-                        context.setVariable(contentDB[i], nameUser);
-                    }
-                }
-            }
-        }
-        LocalDateTime myDateObj = LocalDateTime.now();
-        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm");
-        String formattedDate = myDateObj.format(myFormatObj);
-
-        if (notError){
-            context.setVariable(
-                    "dateNow",
-                    formattedDate);
-        }
-        return context;
-    }
-
-    private boolean IsEmailValid(String email) {
-        String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
-        return email.matches(regex);
-    }
-
-    private void SaveFailedToPDF(String name,String userId,String content){
+    private void SaveFailedToPDF(String name,String userId,String content, String description){
 
         LocalDate localDate = LocalDate.now();
 
@@ -214,7 +221,26 @@ public class GeneratePDFController {
                     Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
                     userId,
                     "FAILED",
-                    content));
+                    content,
+                    description
+                    ));
+    }
+
+    private ResponseEntity<Resource> ErrorRespone(String ErrorDesc){
+        ByteArrayResource ErrorResource = new ByteArrayResource(ErrorDesc.getBytes());
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(ErrorResource);
+    }
+
+    private boolean isNotNullContent(String[] contents){
+        boolean isNotNull = true;
+        for (int i = 0; i < contents.length; i++) {
+            if (contents[i].equals("")) { //check the content is not null
+                isNotNull = false;
+            }
+        }
+        return isNotNull;
     }
 }
 

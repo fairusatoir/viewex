@@ -32,6 +32,19 @@ public class logModel {
     @Column(name = "content")
     private String content;
 
+    @Basic
+    @Column(name = "description")
+    private String description;
+
+    public logModel(String file_name, Date printed_date, String user_id, String status, String content, String description) {
+        this.file_name = file_name;
+        this.printed_date = printed_date;
+        this.user_id = user_id;
+        this.status = status;
+        this.content = content;
+        this.description = description;
+    }
+
     public logModel(String file_name, Date printed_date, String user_id, String status, String content) {
         this.file_name = file_name;
         this.printed_date = printed_date;
@@ -86,5 +99,13 @@ public class logModel {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
