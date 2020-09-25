@@ -20,4 +20,5 @@ public class ViewexApplication {
 //	5. https://www.baeldung.com/thymeleaf-arrays
 //	6. https://www.baeldung.com/thymeleaf-generate-pdf
 //	7. https://stackoverflow.com/a/54806606
+//	8. https://www.w3schools.com/java/java_date.asp
 }

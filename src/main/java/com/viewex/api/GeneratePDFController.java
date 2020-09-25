@@ -1,12 +1,12 @@
 package com.viewex.api;
 
 import com.viewex.model.logModel;
-import com.viewex.service.LogInterface;
+import com.viewex.repository.LogRepository;
+import com.viewex.repository.TemplateRepository;
 import org.springframework.core.io.ByteArrayResource;
 import com.lowagie.text.DocumentException;
 import com.viewex.Exception.Error;
 import com.viewex.model.template;
-import com.viewex.service.pdfGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -25,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
@@ -33,10 +34,10 @@ import java.time.format.DateTimeFormatter;
 public class GeneratePDFController {
 
     @Autowired
-    private pdfGenerator pdfService;
+    private TemplateRepository templateRepo;
 
     @Autowired
-    private LogInterface logService;
+    private LogRepository logRepo;
 
     @CrossOrigin
     @GetMapping("/trial")
@@ -54,30 +55,32 @@ public class GeneratePDFController {
             @RequestParam("userId") String userId
     ) throws DocumentException {
 
-        template templateDataDB = pdfService.getTemplate(idTemplate);
+        template templateDataDB = templateRepo.findTempalte(idTemplate);
         String[] contents = content.split("\\*");
         String fileName = name+"."+fileType;
 
         try {
 
             if (templateDataDB == null) { //Check Template Document is exist
+                SaveFailedToPDF(name,userId,content);
                 throw new Error("Template not Found");
+
             } else {
 
                 if (contents.length != templateDataDB.getContent_sum()) { //check the amount of content
-                    throw new Error("the amount of content does not match");
+                    SaveFailedToPDF(name,userId,content);
+                    throw new Error("The mount of Content does not match, check Content");
                 } else {
 
                     GeneratePDFController thymeleaf2Pdf = new GeneratePDFController();
-                    String htmlConfig = thymeleaf2Pdf.parseThymeleafTemplate(templateDataDB, contents);
-                    thymeleaf2Pdf.generatePdfFromHtml(fileName,htmlConfig);
+                    String htmlConfig = thymeleaf2Pdf.ParseThymeleafTemplate(templateDataDB, contents);
+                    thymeleaf2Pdf.GeneratePdfFromHtml(fileName,htmlConfig);
 
-                    ResponseEntity<Resource> httpPDF = DownloadFile(fileName);
+                    ResponseEntity<Resource> httpPDF = DownloadFile(fileName, name, userId,content);
 
-                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
                     LocalDate localDate = LocalDate.now();
 
-                    logService.saveLog(
+                    logRepo.save(
                             new logModel(name,
                                     Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
                                     userId,
@@ -88,11 +91,18 @@ public class GeneratePDFController {
                 }
             }
         }catch (IOException e){
+            SaveFailedToPDF(name,userId,content);
             throw new Error("Error! try again", e);
         }
     }
 
-    public ResponseEntity<Resource> DownloadFile(String fileName) throws IOException {
+    public ResponseEntity<Resource> DownloadFile(
+            String fileName,
+            String name,
+            String  userId,
+            String  content)
+            throws IOException {
+
         File file = new File("src/main/resources/pdf/" + fileName);
 
         HttpHeaders header = new HttpHeaders();
@@ -112,11 +122,31 @@ public class GeneratePDFController {
                     .body(resource);
 
         }catch (IOException e){
-            throw new Error("Failed to download PDF" + e.toString());
+            SaveFailedToPDF(name,userId,content);
+            throw new Error("Failed to download file "+fileName+" | "+ e.toString());
         }
     }
 
-    public void generatePdfFromHtml(String fileName,String htmltopdfCOndif) throws IOException, DocumentException{
+    private String ParseThymeleafTemplate(
+            template templateDataDB,
+            String[] contents){
+
+        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setPrefix("templates/");
+        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode(TemplateMode.HTML);
+
+        TemplateEngine templateEngine = new TemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver);
+
+        String[] contentDB = templateDataDB.getFormat_content().split(",");
+
+        Context context = ReplaceContent(contents,contentDB);
+
+        return templateEngine.process(templateDataDB.getTemplate_file(), context);
+    }
+
+    private void GeneratePdfFromHtml(String fileName,String htmltopdfCOndif) throws IOException, DocumentException{
         String outputFolder = "src/main/resources/pdf/" + fileName;
         OutputStream outputStream = new FileOutputStream(outputFolder);
 
@@ -128,30 +158,14 @@ public class GeneratePDFController {
         outputStream.close();
     }
 
-    private String parseThymeleafTemplate(template templateDataDB, String[] contents){
-
-        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setPrefix("templates/");
-        templateResolver.setSuffix(".html");
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-
-        TemplateEngine templateEngine = new TemplateEngine();
-        templateEngine.setTemplateResolver(templateResolver);
-
-        String[] contentDB = templateDataDB.getFormat_content().split(",");
-        Context context = replaceContent(contents,contentDB);
-
-        String nameFileTemplateHTML = templateDataDB.getTemplate_file();
-
-        return templateEngine.process(nameFileTemplateHTML, context);
-    }
-
-    private Context replaceContent(String[] contents, String[] contentDB){
+    private Context ReplaceContent(String[] contents, String[] contentDB){
         Context context = new Context();
+        Boolean notError = true;
 
         for (int i = 0; i < contents.length; i++) {
 
             if (contents[i].equals("")) { //check the content is not null
+                notError = false;
                 throw new Error("There is a null content section");
             } else {
 
@@ -160,7 +174,7 @@ public class GeneratePDFController {
                     context.setVariable(contentDB[i], contents[i]);
 
                 }else {
-                    if ( isEmailValid(contents[i]) ){ //  Check is email ?
+                    if ( IsEmailValid(contents[i]) ){ //  Check is email ?
                         context.setVariable(contentDB[i], contents[i]);
                     }else {
 
@@ -170,19 +184,38 @@ public class GeneratePDFController {
                             nameUser= nameUser+ separateName +" ";
                         }
                         context.setVariable(contentDB[i], nameUser);
-
                     }
                 }
             }
         }
+        LocalDateTime myDateObj = LocalDateTime.now();
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm");
+        String formattedDate = myDateObj.format(myFormatObj);
+
+        if (notError){
+            context.setVariable(
+                    "dateNow",
+                    formattedDate);
+        }
         return context;
     }
 
-    private boolean isEmailValid(String email) {
+    private boolean IsEmailValid(String email) {
         String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
         return email.matches(regex);
     }
 
+    private void SaveFailedToPDF(String name,String userId,String content){
+
+        LocalDate localDate = LocalDate.now();
+
+        logRepo.save(
+            new logModel(name,
+                    Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                    userId,
+                    "FAILED",
+                    content));
+    }
 }
 
 
