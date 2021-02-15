@@ -8,7 +8,7 @@
         }
 
         table, th, td {
-            border: 0px solid black;
+            border: 0px hidden black;
         }
 
         table {
@@ -39,7 +39,7 @@
             line-height: 14pt;
         }
 
-        tr.page-footer {
+        .page-footer {
             height: 51px;
             text-align:right;
         }
@@ -255,9 +255,10 @@
             <th></th>
             <th style="padding-right: 3cm;">LAMPIRAN III</th>
         </tr>
-        <tr>
+        <tr style="height: 645px;">
             <td valign="top" style="padding-left: 1in;">
                 <span th:text="${dateNow}"></span>
+                <br/>
                 <br/>
                 <br/>
                 <span th:text="${name}"></span>

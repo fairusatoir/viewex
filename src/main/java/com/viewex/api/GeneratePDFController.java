@@ -53,18 +53,26 @@ public class GeneratePDFController {
             @RequestParam("content") String content,
             @RequestParam("userId") String userId
     ) throws DocumentException {
-
-        template templateDataDB = templateRepo.findTempalte(idTemplate);
-        String[] contents = content.split("\\*");
-        String fileName = name+"."+fileType;
-
         try {
-            if (templateDataDB == null) { //Check Template Document is exist
+            template templateDataDB = templateRepo.findTempalte(idTemplate);
+            String[] contents = content.split("\\*");
+
+            if (name.equals("")){
+                String erroDesc = "Name Document is Null!";
+                SaveFailedToPDF(name,userId,content,erroDesc);
+                return ErrorRespone(erroDesc);
+            }else if (fileType.equals("")) { //Check Template Document is exist
+                String erroDesc = "fileType Document is exist!";
+                SaveFailedToPDF(name,userId,content,erroDesc);
+                return ErrorRespone(erroDesc);
+            }
+            else if (templateDataDB == null) { //Check Template Document is exist
                 String erroDesc = "Template Document is exist!";
                 SaveFailedToPDF(name,userId,content,erroDesc);
                 return ErrorRespone(erroDesc);
             } else {
 
+                String fileName = name+"."+fileType;
                 if (contents.length != templateDataDB.getContent_sum()) { //check the amount of content
 
                     String erroDesc = "The amount of content is not the same as the template";
@@ -243,5 +251,3 @@ public class GeneratePDFController {
         return isNotNull;
     }
 }
-
-
