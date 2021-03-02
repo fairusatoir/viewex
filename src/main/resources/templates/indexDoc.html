@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Documentation File Generator</title>
+	<STYLE type="text/css">#content{ FONT-SIZE: 0.7em; PADDING-BOTTOM: 2em; MARGIN-LEFT: 30px}BODY{MARGIN-TOP: 0px; MARGIN-LEFT: 0px; COLOR: #000000; FONT-FAMILY: Verdana; BACKGROUND-COLOR: white}P{MARGIN-TOP: 0px; MARGIN-BOTTOM: 12px; COLOR: #000000; FONT-FAMILY: Verdana}PRE{BORDER-RIGHT: #f0f0e0 1px solid; PADDING-RIGHT: 5px; BORDER-TOP: #f0f0e0 1px solid; MARGIN-TOP: -5px; PADDING-LEFT: 5px; FONT-SIZE: 1.2em; PADDING-BOTTOM: 5px; BORDER-LEFT: #f0f0e0 1px solid; PADDING-TOP: 5px; BORDER-BOTTOM: #f0f0e0 1px solid; FONT-FAMILY: Courier New; BACKGROUND-COLOR: #e5e5cc}.heading1{MARGIN-TOP: 0px; PADDING-LEFT: 15px; FONT-WEIGHT: normal; FONT-SIZE: 26px; MARGIN-BOTTOM: 0px; PADDING-BOTTOM: 3px; MARGIN-LEFT: -30px; WIDTH: 100%; COLOR: #ffffff; PADDING-TOP: 10px; FONT-FAMILY: Tahoma; BACKGROUND-COLOR: #003366}.intro{MARGIN-LEFT: -15px;FONT-SIZE: 1.17em;}
+	
+	.tg  {border-collapse:collapse;border-spacing:0;}
+	.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+	  overflow:hidden;padding:10px 5px;word-break:normal;}
+	.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+	  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+	.tg .tg-d5ku{background-color:#003366;border-color:#000000;color:#ffffff;font-weight:bold;text-align:left;vertical-align:top}
+	.tg .tg-0lax{text-align:left;vertical-align:top}
+	</STYLE>
+</head>
+<body>
+<div id="content">
+	<P class="heading1">Documentation File Generator</P>
+
+	<br>
+	<br>
+	<P class='intro'>
+		<B>How to use File Generator</B>
+	</P>
+	
+	<font color="blue">Example </font><font color="teal">URL to generate PDF file</font><br><br>
+	http://IP_Server:port_use/generate-file/print?name=Berkas01&idTemplate=1&fileType=pdf&content=3310020601800001*John_Smith*06-01-1580*12345678*24-09-2020*10000000*24-09-2020*24-09-2021*5*500000*24-09-2020*Sepuluh_Juta*Lima_Ratus_Ribu&userId=testing
+	<br>
+	<br>
+	<br>
+  <P class='intro'>
+    <B>Explain</B>
+  </P>
+	<table class="tg">
+<thead>
+  <tr>
+    <th class="tg-d5ku">Params</th>
+    <th class="tg-d5ku">explanation</th>
+    <th class="tg-d5ku">example</th>
+    <th class="tg-d5ku"></th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-0lax">name</td>
+    <td class="tg-0lax">file name to be generated</td>
+    <td class="tg-0lax">Berkas01</td>
+    <td class="tg-0lax"></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">idTemplate</td>
+    <td class="tg-0lax">The id of the file template you want to be generated</td>
+    <td class="tg-0lax">1 = kredit</td>
+    <td class="tg-0lax"></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">filetype</td>
+    <td class="tg-0lax">type of file extension generated</td>
+    <td class="tg-0lax">only "pdf" available</td>
+    <td class="tg-0lax"></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">userId</td>
+    <td class="tg-0lax">who created the files or use NPP BNI</td>
+    <td class="tg-0lax"></td>
+    <td class="tg-0lax"></td>
+  </tr>
+  <tr>
+    <td class="tg-baqh" rowspan="12">content</td>
+    <td class="tg-0lax">3310020601800001</td>
+    <td class="tg-0lax">Creditor's KTP</td>
+    <td class="tg-0lax"></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">John_Smith</td>
+    <td class="tg-0lax">Creditor's Name</td>
+    <td class="tg-0lax">use Underscore for word separator</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">06-01-1991</td>
+    <td class="tg-0lax">Creditor's birthday</td>
+    <td class="tg-0lax"></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">1234567</td>
+    <td class="tg-0lax">reference number</td>
+    <td class="tg-0lax"></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">10000000</td>
+    <td class="tg-0lax">Creditorthe amount of credit granted</td>
+    <td class="tg-0lax"></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">24-09-2020</td>
+    <td class="tg-0lax">credit start date</td>
+    <td class="tg-0lax"></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">24-09-2021</td>
+    <td class="tg-0lax">credit expiration date</td>
+    <td class="tg-0lax"></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">5</td>
+    <td class="tg-0lax">amount of interest</td>
+    <td class="tg-0lax"></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">500000</td>
+    <td class="tg-0lax">installments each month</td>
+    <td class="tg-0lax"></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">24-09-2020 *second</td>
+    <td class="tg-0lax">signing date</td>
+    <td class="tg-0lax"></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Sepuluh_Juta</td>
+    <td class="tg-0lax">writing letters for credit nominal</td>
+    <td class="tg-0lax">use Underscore for word separator</td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Lima_Ratus_Ribu</td>
+    <td class="tg-0lax">Sepwriting letters for nominal per month</td>
+    <td class="tg-0lax">use Underscore for word separator</td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+	
+</body>
+</html>

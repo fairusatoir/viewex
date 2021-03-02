@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "log_pdf")
+@Table(name = "to_pdf_log")
 public class logModel {
 
     @Id

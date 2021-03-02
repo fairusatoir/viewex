@@ -3,7 +3,7 @@ package com.viewex.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "template")
+@Table(name = "to_pdf_template")
 public class template {
 
     @Id

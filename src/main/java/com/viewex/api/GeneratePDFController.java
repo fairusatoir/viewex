@@ -12,13 +12,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.thymeleaf.templateresolver.FileTemplateResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.*;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,7 +32,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 @RestController
-@RequestMapping("/generate-file")
+//@RequestMapping("/generate-file")
 public class GeneratePDFController {
 
     @Autowired
@@ -39,13 +42,20 @@ public class GeneratePDFController {
     private LogRepository logRepo;
 
     @CrossOrigin
-    @GetMapping("/trial")
+    @GetMapping("/")
+    public ModelAndView index(){
+        ModelAndView index = new ModelAndView("indexDoc");
+        return index;
+    }
+
+    @CrossOrigin
+    @GetMapping("/test")
     public String StringTrial(){
         return "Berhasil Jalan API nya";
     }
 
     @CrossOrigin
-    @GetMapping(value = "", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @GetMapping(value = "print", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<Resource> configPDF(
             @RequestParam("name") String name,
             @RequestParam("idTemplate") int idTemplate,
@@ -61,13 +71,13 @@ public class GeneratePDFController {
                 String erroDesc = "Name Document is Null!";
                 SaveFailedToPDF(name,userId,content,erroDesc);
                 return ErrorRespone(erroDesc);
-            }else if (fileType.equals("")) { //Check Template Document is exist
-                String erroDesc = "fileType Document is exist!";
+            }else if (fileType.equals("") || !fileType.equals("pdf") ) { //Check Template Document is null
+                String erroDesc = "only pdf data types are available";
                 SaveFailedToPDF(name,userId,content,erroDesc);
                 return ErrorRespone(erroDesc);
             }
             else if (templateDataDB == null) { //Check Template Document is exist
-                String erroDesc = "Template Document is exist!";
+                String erroDesc = "Template Document not exist!";
                 SaveFailedToPDF(name,userId,content,erroDesc);
                 return ErrorRespone(erroDesc);
             } else {
@@ -92,16 +102,6 @@ public class GeneratePDFController {
                     thymeleaf2Pdf.GeneratePdfFromHtml(fileName,htmlConfig);
 
                     ResponseEntity<Resource> httpPDF = DownloadFile(fileName, name, userId,content);
-
-                    LocalDate localDate = LocalDate.now();
-
-                    logRepo.save(
-                            new logModel(name,
-                                    Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
-                                    userId,
-                                    "SUCCESS",
-                                    content));
-
                     return httpPDF;
                 }
             }
@@ -120,7 +120,7 @@ public class GeneratePDFController {
             String  content
     )throws IOException {
 
-        File file = new File("src/main/resources/pdf/" + fileName);
+        File file = new File("pdf/" + fileName);
 
         HttpHeaders header = new HttpHeaders();
         header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ fileName);
@@ -132,6 +132,15 @@ public class GeneratePDFController {
         try {
             ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
+            LocalDate localDate = LocalDate.now();
+
+            logRepo.save(
+                    new logModel(name,
+                            Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant()),
+                            userId,
+                            "SUCCESS",
+                            content));
+
             return ResponseEntity.ok()
                     .headers(header)
                     .contentLength(file.length())
@@ -142,7 +151,6 @@ public class GeneratePDFController {
             String erroDesc = "Failed Downlaod";
             SaveFailedToPDF(name,userId,content,erroDesc);
             return ErrorRespone(erroDesc);
-
         }
     }
 
@@ -154,8 +162,8 @@ public class GeneratePDFController {
             String content
     ){
 
-        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setPrefix("templates/");
+        FileTemplateResolver templateResolver = new FileTemplateResolver();
+        templateResolver.setPrefix("templates\\\\");
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode(TemplateMode.HTML);
 
@@ -209,7 +217,7 @@ public class GeneratePDFController {
     }
 
     private void GeneratePdfFromHtml(String fileName,String htmltopdfCOndif) throws IOException, DocumentException{
-        String outputFolder = "src/main/resources/pdf/" + fileName;
+        String outputFolder = "pdf/" + fileName;
         OutputStream outputStream = new FileOutputStream(outputFolder);
 
         ITextRenderer renderer = new ITextRenderer();
