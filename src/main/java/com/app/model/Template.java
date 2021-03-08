@@ -1,4 +1,4 @@
-package com.viewex.model;
+package com.app.model;
 
 import javax.persistence.*;
 

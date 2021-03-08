@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+
+        body {
+            margin:0;
+        }
+
+        table, td {
+            border: 0px hidden black;
+        }
+
+        table{
+            display: inline;
+        }
+
+        td {
+            font-size: 12px;
+            line-height: 16pt;
+        }
+
+        .margin-header{
+            padding-top: 25mm;
+        }
+
+        .leftTable{
+            width: 1.5in;
+        }
+
+        .bottomText{
+            padding-top: 0.5in;
+            text-align: center;
+        }
+
+        .space{
+            height: 20px;
+        }
+
+        .content-page {
+            margin : 0px auto;
+            width: auto;
+        }
+
+        .page-size{
+            font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+            text-align: left;
+
+            border-collapse: collapse;
+            margin : 0px auto;
+
+            width: 210mm;
+            max-width: 210mm;
+            /*min-width: 210mm;*/
+        }
+
+        img {
+            position:absolute;
+            width: 170mm;
+            height: auto;
+            z-index:-1;
+        }
+
+        @page {
+            size: A4 portrait;
+            margin-left: 25mm;
+            margin-right: 25mm;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-size">
+        <img th:src="${watermark}" src="image/pengajuan.png"
+             style=""/>
+        <div class="margin-header"></div>
+        <table class="content-page">
+            <tr>
+                <td style="height: 25mm"></td>
+            </tr>
+            <tr>
+                <td colspan="3" style="padding-right: 50mm; text-align: justify">
+                    Permohonan KTA BNI Fleksi Anda telah Kami SETUJUI dan diteruskan ke Kantor Cabang BNI dengan ketentuan sebagai berikut :
+                </td>
+            </tr>
+            <tr>
+                <td class="leftTable">Nomor Aplikasi</td>
+                <td> :</td>
+                <td th:text="${nomorAplikasi}"></td>
+            </tr>
+            <tr>
+                <td class="leftTable">Nama</td>
+                <td> :</td>
+                <td th:text="${nama}"></td>
+            </tr>
+            <tr>
+                <td class="leftTable">Maksimum Kredit</td>
+                <td> :</td>
+                <td>
+                    <span>Rp. </span>
+                    <span th:text="${kreditMax}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="leftTable">Angsuran / bulan</td>
+                <td> :</td>
+                <td>
+                    <span>Rp. </span>
+                    <span th:text="${angsuran}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="leftTable">Jangka Waktu Kredit</td>
+                <td> :</td>
+                <td>
+                    <span th:text="${jangkaWaktu}"></span>
+                    <span>Tahun</span>
+                </td>
+            </tr>
+            <tr class="space"></tr>
+            <tr>
+                <td colspan="3" style="padding-right: 50mm; text-align: justify">Pencairan 1 x 24 jam setelah menandatangani Perjanjian Kredit di Kantor Cabang BNI.
+                    Selanjutnya Anda akan dihubungi oleh Petugas Cabang BNI. Persetujuan ini berlaku 30 hari kalender sejak diterbitkan.
+                    Untuk Informasi lebih lanjut hubungi BNI Call 1500046.
+                </td>
+            </tr>
+            <tr class="space"></tr>
+            <tr>
+                <td colspan="3" style="padding-right: 50mm; text-align: justify">Resi ini merupakan bukti permohonan kredit oleh nasabah dan bukti
+                    permohonan kredit yang SAH dan mempunyai kekuatan hukum yang mengikat. <b>HARAP DISIMPAN</b>.</td>
+            </tr>
+            <tr>
+                <td class="bottomText" colspan="3" style="padding-right: 50mm;">
+                    <i>&lt;This is computer generated receipt no signature required></i>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

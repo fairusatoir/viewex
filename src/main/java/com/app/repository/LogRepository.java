@@ -1,6 +1,6 @@
-package com.viewex.repository;
+package com.app.repository;
 
-import com.viewex.model.LogGenerate;
+import com.app.model.LogGenerate;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

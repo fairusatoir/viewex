@@ -1,10 +1,10 @@
-package com.viewex;
+package com.app;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ViewexApplicationTests {
+class ApplicationTests {
 
 	@Test
 	void contextLoads() {
